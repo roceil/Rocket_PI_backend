@@ -11,7 +11,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-primary-tint leading-normal;
+    @apply bg-gray-300 leading-normal;
   }
   h1 {
     @apply text-4xl-plus font-bold lg:text-5xl;
@@ -38,3 +38,5 @@
     align-items: center;
   }
 }
+
+

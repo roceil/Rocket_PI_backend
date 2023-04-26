@@ -1,0 +1,60 @@
+/* 調整表單錯誤訊息位置 */
+.ant-form-item-explain-error {
+  padding-left: 9.453px;
+}
+
+.modalResetPassword .ant-btn-primary {
+  background-color: #4a5364 !important;
+  border-color: #4a5364 !important;
+}
+.modalResetPassword .ant-modal-title {
+  color: #424242;
+  font-size: 24px;
+}
+.modalResetPassword .ant-input-affix-wrapper:focus {
+  border-color: #4a5364 !important;
+  box-shadow: none !important;
+}
+.modalResetPassword .ant-input-affix-wrapper:hover {
+  border-color: #4a5364 !important;
+  box-shadow: none !important;
+}
+
+/* 這個會調整所有錯誤訊息的邊框顏色 */
+.ant-input-status-error{
+  border-color: #D14D3C !important;
+}
+
+/* 這個會調整所有錯誤訊息的文字顏色 */
+.ant-form-item-explain-error{
+  color: #D14D3C !important;
+}
+
+/* 調整重新發送的底線樣式 */
+.resend span {
+  border-bottom: 1px solid #000;
+}
+
+/* 全部的 modal  */
+.ant-modal-content{
+  padding: 24px !important;
+}
+.ant-modal-footer .ant-btn-default{
+  border-radius: 24px !important;
+  color: #4a5364 !important;
+  border-color: #4a5364 !important;
+}
+.ant-modal-footer .ant-btn-default:hover{
+  opacity: 0.8 !important;
+}
+
+.ant-modal-footer .ant-btn-primary{
+  border-radius: 24px !important;
+  background-color: #4a5364 !important;
+  border-color: #4a5364 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+.ant-modal-footer .ant-btn-primary:hover{
+  opacity: 0.8 !important;
+}
