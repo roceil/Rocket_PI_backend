@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { Tooltip } from 'antd'
+import { Statistic, Tooltip } from 'antd'
+import CountUp from 'react-countup'
 import { IOrderRenderData } from '@/types/interface'
 import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 
@@ -28,10 +29,14 @@ export const getServerSideProps = async () => {
 export default function Payment({
   Data
 }: {
-  Data: { orderRecordsList: IOrderRenderData[] }
+  Data: { orderRecordsList: IOrderRenderData[]; PriceTotal: number }
 }) {
-  const { orderRecordsList = [] } = Data
+  const { orderRecordsList = [], PriceTotal } = Data
   const [renderData, setRenderData] = useState(orderRecordsList)
+  const [renderTotal, setRenderTotal] = useState(PriceTotal)
+  const formatter = (value: number) => (
+    <CountUp end={value} separator=',' />
+  )
 
   // ==================== 搜尋 API ====================
   const [searchWord, setSearchWord] = useState('')
@@ -40,8 +45,8 @@ export default function Payment({
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/getNewebPayOrder?UserName=${searchWord}`
       )
-      console.log(res)
       setRenderData(res.data.Data.orderRecordsList)
+      setRenderTotal(res.data.Data.PriceTotal)
     } catch (error) {
       console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
     }
@@ -65,7 +70,15 @@ export default function Payment({
         />
       </Tooltip>
 
-      <h3 className='text-xl font-bold mb-4'>金流記錄</h3>
+      <div className=' flex justify-between items-center'>
+        <h3 className='text-xl font-bold mb-4'>金流記錄</h3>
+        <Statistic
+          title='諮商總金額'
+          value={renderTotal}
+          formatter={formatter as any}
+          className='pr-12'
+        />
+      </div>
 
       <div>
         <ul className='flex pb-2 font-bold h-[57px] bg-white border-b border-[#A0AEC0] text-[#A0AEC0] sticky top-[-50px] items-baseline'>

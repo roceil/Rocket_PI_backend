@@ -92,10 +92,10 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
 
             <li>
               <button
-                className='group flex items-center w-full rounded-2xl hover:!bg-white py-3 px-4 space-x-3'
+                className='group flex items-center w-full rounded-2xl outline-none hover:!bg-white py-3 px-4 space-x-3'
                 onClick={showModal}
               >
-                <LogoutOutlined className='sideBarButton text-secondary group-hover:text-white group-hover:bg-secondary' />
+                <LogoutOutlined className='sideBarButton text-secondary group-hover:text-white group-hover:bg-secondary ' />
                 <p className='text-gray-600 group-hover:text-secondary'>登出</p>
               </button>
             </li>
@@ -115,11 +115,12 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
         }
         open={openLogOutModal}
         onOk={hideModal}
-        onCancel={hideModal}
+        onCancel={()=>setOpenLogOutModal(false)}
         okText='登出'
         cancelText='取消'
         mask
         centered
+        // keyboard={false}
       >
         <p className='text-xl mt-6'>請問是否要登出？</p>
       </Modal>
