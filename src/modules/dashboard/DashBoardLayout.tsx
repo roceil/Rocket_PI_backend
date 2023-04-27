@@ -102,7 +102,7 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
           </ul>
         </div>
 
-        <div className='w-[83.0246%] max-h-[900px] rounded-2xl py-10 px-9 bg-white mt-[62px] overflow-y-auto'>
+        <div className='w-[83.0246%] max-h-[700px] rounded-2xl py-10 px-9 bg-white mt-[62px] overflow-y-auto'>
           {children}
         </div>
       </div>

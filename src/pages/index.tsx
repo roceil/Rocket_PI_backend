@@ -32,8 +32,14 @@ export default function Home() {
           link: '/dashboard'
         })
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log('🚀 ~ file: index.tsx:15 ~ logIn ~ error:', error)
+      const { Message }: { Message: string } = error.response.data
+      CustomAlert({
+        modal,
+        Message,
+        type: 'error'
+      })
     }
   }
 

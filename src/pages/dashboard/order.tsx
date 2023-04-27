@@ -6,8 +6,7 @@ import rateStar from 'public/rateStar.svg'
 import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 import { Tooltip } from 'antd'
 
-const fakeAry = Array(15).fill(0)
-const fakeRate = Array(3).fill(0)
+
 
 interface IOrderRenderData {
   CounselorName: string
@@ -45,11 +44,7 @@ export default function Order({
 }: {
   Data: { appointmentsList: IOrderRenderData[] }
 }) {
-  const { appointmentsList } = Data
-  console.log(
-    '🚀 ~ file: order.tsx:33 ~ order ~ appointmentsList:',
-    appointmentsList
-  )
+  const { appointmentsList = [] } = Data
   const [renderData, setRenderData] = useState(appointmentsList)
 
   // ==================== 時間轉換函式 ====================
@@ -64,11 +59,56 @@ export default function Order({
 
   // ==================== 搜尋 API ====================
   const [searchWord, setSearchWord] = useState('')
-  const handleSearch = (e: { key: string }) => {
-    if (e.key === 'Enter') {
-      console.log('搜尋')
+  const keyWordGet = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/getAppTList?UserName=${searchWord}`
+      )
+      console.log(res)
+      setRenderData(res.data.Data.appointmentsList)
+    } catch (error) {
+      console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
     }
   }
+  const handleSearch = (e: { key: string }) => {
+    if (e.key === 'Enter') {
+      keyWordGet()
+    }
+  }
+
+  // ==================== 確認訂單狀態 Switch ====================
+  const checkReservationStatus = (status: string) => {
+    switch (status) {
+      case '待預約':
+        return (
+          <div className='bg-slate-300 text-white inline-block py-1 px-3 rounded-lg font-bold'>
+            {status}
+          </div>
+        )
+      case '待回覆':
+        return (
+          <div className='bg-gray-600 text-white inline-block py-1 px-3 rounded-lg font-bold'>
+            {status}
+          </div>
+        )
+      case '已成立':
+        return (
+          <div className='bg-success text-white inline-block py-1 px-3 rounded-lg font-bold'>
+            {status}
+          </div>
+        )
+      case '已完成':
+        return (
+          <div className='bg-success text-white inline-block py-1 px-3 rounded-lg font-bold'>
+            {status}
+          </div>
+        )
+
+      default:
+        break
+    }
+  }
+
   return (
     <DashBoardLayout>
       <Tooltip title='以 Enter 鍵搜尋'>
@@ -106,6 +146,7 @@ export default function Order({
             }) => {
               const newTime = convertTime(Time)
               const newDate = convertData(Time)
+              console.log(newDate)
               if (!Star) {
                 return (
                   <li
@@ -116,20 +157,22 @@ export default function Order({
                     <div className='w-1/6'>{UserName}</div>
                     <div className='w-1/6'>{Field}</div>
                     <div className='w-1/6'>
-                      <p className={`hidden ${Time && !'block'}`}>{newDate}</p>
-                      <p className={`hidden ${Time && !'block'}`}>{newTime}</p>
+                      <p className={`hidden ${Time && '!block'}`}>{newDate}</p>
+                      <p className={`hidden ${Time && '!block'}`}>{newTime}</p>
                       <p className={`block ${Time && '!hidden'}`}>待預約</p>
                     </div>
                     <div className='w-1/6'>
-                      <div className='bg-slate-300 text-white inline-block py-1 px-3 rounded-lg font-bold'>
-                        {ReserveStatus === '待預約' ? '尚未進行' : '已完成'}
-                      </div>
+                      {checkReservationStatus(ReserveStatus)}
+                      {/* <div className='bg-slate-300 text-white inline-block py-1 px-3 rounded-lg font-bold'>
+                        {ReserveStatus}
+                      </div> */}
                     </div>
                     <div className='w-1/6'>-</div>
                   </li>
                 )
               }
               if (Star) {
+                const rate = Array(Star).fill(0)
                 return (
                   <li
                     key={Id}
@@ -139,8 +182,8 @@ export default function Order({
                     <div className='w-1/6'>{UserName}</div>
                     <div className='w-1/6'>{Field}</div>
                     <div className='w-1/6'>
-                      <p className={`hidden ${Time && !'block'}`}>{newDate}</p>
-                      <p className={`hidden ${Time && !'block'}`}>{newTime}</p>
+                      <p className={`hidden ${Time && '!block'}`}>{newDate}</p>
+                      <p className={`hidden ${Time && '!block'}`}>{newTime}</p>
                       <p className={`block ${Time && '!hidden'}`}>待預約</p>
                     </div>
                     <div className='w-1/6'>
@@ -149,7 +192,7 @@ export default function Order({
                       </div>
                     </div>
                     <div className='w-1/6 flex'>
-                      {fakeRate.map((_, index) => {
+                      {rate.map((_, index) => {
                         return (
                           <Image
                             key={index}

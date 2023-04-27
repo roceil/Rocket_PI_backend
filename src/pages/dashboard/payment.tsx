@@ -5,8 +5,6 @@ import { Tooltip } from 'antd'
 import { IOrderRenderData } from '@/types/interface'
 import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 
-
-
 export const getServerSideProps = async () => {
   try {
     const res = await axios.get(
@@ -32,7 +30,7 @@ export default function Payment({
 }: {
   Data: { orderRecordsList: IOrderRenderData[] }
 }) {
-  const { orderRecordsList } = Data
+  const { orderRecordsList = [] } = Data
   const [renderData, setRenderData] = useState(orderRecordsList)
 
   // ==================== 搜尋 API ====================
@@ -42,6 +40,7 @@ export default function Payment({
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/getNewebPayOrder?UserName=${searchWord}`
       )
+      console.log(res)
       setRenderData(res.data.Data.orderRecordsList)
     } catch (error) {
       console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
