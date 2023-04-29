@@ -5,6 +5,7 @@ import { Statistic, Tooltip } from 'antd'
 import CountUp from 'react-countup'
 import { IOrderRenderData } from '@/types/interface'
 import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
+import useCloseLoading from '@/common/hooks/useCloseLoading'
 
 export const getServerSideProps = async () => {
   try {
@@ -34,9 +35,10 @@ export default function Payment({
   const { orderRecordsList = [], PriceTotal } = Data
   const [renderData, setRenderData] = useState(orderRecordsList)
   const [renderTotal, setRenderTotal] = useState(PriceTotal)
-  const formatter = (value: number) => (
-    <CountUp end={value} separator=',' />
-  )
+  const formatter = (value: number) => <CountUp end={value} separator=',' />
+
+  // ==================== 關閉 Loading ====================
+  useCloseLoading()
 
   // ==================== 搜尋 API ====================
   const [searchWord, setSearchWord] = useState('')

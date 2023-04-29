@@ -1,16 +1,15 @@
-import { Image, Modal, Switch, Tooltip } from 'antd'
-import axios from 'axios'
-import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 import { useState } from 'react'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import useCloseLoading from '@/common/hooks/useCloseLoading'
+import useOpenLoading from '@/common/hooks/useOpenLoading'
+import { Image, Modal, Switch, Tooltip } from 'antd'
+import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
+import { loadingStatus } from '@/common/redux/feature/loading'
 import CustomAlert from '@/common/helpers/customAlert'
+import { ILicenseList } from '@/types/interface'
 
-interface ILicenseList {
-  CertNumber: string
-  Id: number
-  LicenseImg: string
-  Name: string
-  Validation: boolean
-}
+
 
 export const getServerSideProps = async () => {
   try {
@@ -39,7 +38,12 @@ export default function Index({
 }) {
   const { LicenseList = [] } = Data
   const [modal, alertModal] = Modal.useModal()
+  const openLoading = useOpenLoading()
+  const dispatch = useDispatch()
   const [renderData, setRenderData] = useState<ILicenseList[]>(LicenseList)
+
+  // ==================== 關閉 Loading ====================
+  useCloseLoading()
 
   // ==================== 搜尋 API ====================
   const [searchWord, setSearchWord] = useState('')
@@ -48,7 +52,6 @@ export default function Index({
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/CounselorLicense?CounselorName=${searchWord}`
       )
-      console.log(res)
       setRenderData(res.data.Data.LicenseList)
     } catch (error) {
       console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
@@ -63,7 +66,7 @@ export default function Index({
   // ==================== 開關開通狀態 API ====================
   const handleSwitch = async (CounselorId: number, validation: boolean) => {
     try {
-      const res = await axios.put(
+      await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/udateValidation`,
         {
           CounselorId,
@@ -93,6 +96,7 @@ export default function Index({
 
   // ==================== 補件 API ====================
   const handleSendEmail = async (Id: number) => {
+    openLoading()
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/backend/SendEmailCounselor`,
@@ -107,6 +111,7 @@ export default function Index({
         type: 'success',
         contentKeyWord: '關閉'
       })
+      dispatch(loadingStatus('none'))
     } catch (error: any) {
       console.log('🚀 ~ file: index.tsx:69 ~ handleSwitch ~ error:', error)
       const { Message }: { Message: string } = error.response.data
@@ -115,6 +120,7 @@ export default function Index({
         Message,
         type: 'error'
       })
+      dispatch(loadingStatus('none'))
     }
   }
   return (

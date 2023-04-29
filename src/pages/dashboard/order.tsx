@@ -2,21 +2,13 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import rateStar from 'public/rateStar.svg'
-import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 import { Tooltip } from 'antd'
+import rateStar from 'public/rateStar.svg'
+import useCloseLoading from '@/common/hooks/useCloseLoading'
+import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
+import { IOrderRenderData } from '@/types/interface'
 
 
-
-interface IOrderRenderData {
-  CounselorName: string
-  Field: string
-  Id: number
-  ReserveStatus: string
-  Star: number | null
-  Time: string | null
-  UserName: string
-}
 
 export const getServerSideProps = async () => {
   try {
@@ -46,6 +38,9 @@ export default function Order({
 }) {
   const { appointmentsList = [] } = Data
   const [renderData, setRenderData] = useState(appointmentsList)
+
+  // ==================== 關閉 Loading ====================
+  useCloseLoading()
 
   // ==================== 時間轉換函式 ====================
   const convertData = (time: string | null) => {
@@ -146,7 +141,6 @@ export default function Order({
             }) => {
               const newTime = convertTime(Time)
               const newDate = convertData(Time)
-              console.log(newDate)
               if (!Star) {
                 return (
                   <li
@@ -163,9 +157,6 @@ export default function Order({
                     </div>
                     <div className='w-1/6'>
                       {checkReservationStatus(ReserveStatus)}
-                      {/* <div className='bg-slate-300 text-white inline-block py-1 px-3 rounded-lg font-bold'>
-                        {ReserveStatus}
-                      </div> */}
                     </div>
                     <div className='w-1/6'>-</div>
                   </li>

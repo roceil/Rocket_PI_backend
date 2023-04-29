@@ -3,17 +3,23 @@ import Image from 'next/image'
 import axios from 'axios'
 import { Button, Form, Input, Modal, Space } from 'antd'
 import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { loadingStatus } from '@/common/redux/feature/loading'
 import CustomAlert from '@/common/helpers/customAlert'
+import useOpenLoading from '@/common/hooks/useOpenLoading'
 import logo from '/public/logo.svg'
 
 export default function Home() {
   const [form] = Form.useForm()
   const router = useRouter()
+  const dispatch = useDispatch()
   const [modal, alertModal] = Modal.useModal()
+  const openLoading = useOpenLoading()
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   // ==================== 登入 API ====================
   const logIn = async (Account: string, Password: string) => {
+    openLoading()
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/backend/login`,
@@ -35,6 +41,7 @@ export default function Home() {
     } catch (error: any) {
       console.log('🚀 ~ file: index.tsx:15 ~ logIn ~ error:', error)
       const { Message }: { Message: string } = error.response.data
+      dispatch(loadingStatus('none'))
       CustomAlert({
         modal,
         Message,
@@ -51,7 +58,6 @@ export default function Home() {
     Account: string
     Password: string
   }) => {
-    console.log(Account, Password)
     logIn(Account, Password)
   }
   return (

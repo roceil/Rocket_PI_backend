@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { Modal } from 'antd'
 import {
   BarsOutlined,
   CreditCardOutlined,
@@ -9,11 +10,12 @@ import {
   QuestionCircleFilled,
   UserOutlined
 } from '@ant-design/icons'
+import useOpenLoading from '@/common/hooks/useOpenLoading'
 import logo from '/public/logo.svg'
-import { Button, Modal } from 'antd'
 
 export function DashBoardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const openLoading = useOpenLoading()
   const { pathname } = router
 
   // ==================== 確認目前的 pathName ====================
@@ -56,6 +58,7 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
           <ul className='pt-7 space-y-6 font-bold'>
             <li className='group'>
               <Link
+                onClick={openLoading}
                 href='/dashboard'
                 className={`${isDashBoard} group-hover:bg-secondary group-hover:text-white flex w-full items-center rounded-2xl py-3 px-4  space-x-3 text-gray-600`}
               >
@@ -68,6 +71,7 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
 
             <li className='group'>
               <Link
+                onClick={openLoading}
                 href='/dashboard/order'
                 className={`${isDashBoardOrder} flex w-full group-hover:bg-secondary group-hover:text-white items-center rounded-2xl py-3 px-4 space-x-3 text-gray-600`}
               >
@@ -80,6 +84,7 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
 
             <li className='group'>
               <Link
+                onClick={openLoading}
                 href='/dashboard/payment'
                 className={`${isDashBoardPayment} flex group-hover:bg-secondary group-hover:text-white w-full items-center rounded-2xl py-3 px-4 space-x-3 text-gray-600`}
               >
@@ -115,7 +120,7 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
         }
         open={openLogOutModal}
         onOk={hideModal}
-        onCancel={()=>setOpenLogOutModal(false)}
+        onCancel={() => setOpenLogOutModal(false)}
         okText='登出'
         cancelText='取消'
         mask
