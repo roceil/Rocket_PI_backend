@@ -110,85 +110,44 @@ Clone 專案
 ## 資料夾結構
 
 ```flow
-pi.rocket/
+Rocket_PI_backend/
 ├── public/
-│   ├── images/
-│   │   ├── 404
-│   │   ├── chatRoom
-│   │   ├── counselorList
-│   │   └── ...
 │   ├── loading
-│   ├── favicon.ico
-│   └── mockServiceWorker.js
+│   ├── logo.svg
+│   └── ...
 ├── src/
 │   ├── common/
 │   │   ├── components/
-│   │   │   ├── ChatRoom.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   └── ...
+│   │   │   └── Loading.tsx
 │   │   ├── helpers/
-│   │   │   ├── customAlert.ts
-│   │   │   ├── convertDate.ts
-│   │   │   └── convertDescription.ts
+│   │   │   └── customAlert.tsx
 │   │   ├── hooks/
 │   │   │   ├── useCloseLoading.tsx
 │   │   │   └── useOpenLoading.tsx
-│   │   ├── msw/
-│   │   │   ├── browser.ts
-│   │   │   ├── handler.ts
-│   │   │   ├── index.ts
-│   │   │   └── server.ts
 │   │   └── redux/
-│   │       ├── feature
-│   │       ├── service
+│   │       ├── feature/
+│   │       │   └── loading.ts
 │   │       └── store.ts
-│   ├── lib/
-│   │   ├── hamburger/
-│   │   │   └── aryData.tsx
-│   │   ├── shoppingCart/
-│   │   │   └── shoppingCartData.tsx
-│   │   └── ...
 │   ├── modules/
-│   │   ├── Home/
-│   │   │   ├── Banner.tsx
-│   │   │   ├── TopicCard.tsx
-│   │   │   └── ...
-│   │   ├── login/
-│   │   │   ├── LogInForm.tsx
-│   │   │   └── LogInTab.tsx
-│   │   ├── userCenter/
-│   │   │   ├── HasCancel.tsx
-│   │   │   ├── HasFinish.tsx
-│   │   │   └── ...
-│   │   ├── counselorCenter/
-│   │   │   ├── CounselorCenterLayout.tsx
-│   │   │   └── ...
-│   │   └── ...
+│   │   └── dashboard/
+│   │       └── DashBoardLayout.tsx
 │   ├── pages/
-│   │   ├── api/
-│   │   │   └── bluepay/
-│   │   │       └── return.ts
-│   │   ├── _app.tsx
-│   │   ├── _document.tsx
+│   │   ├── dashboard/
+│   │   │   ├── index.tsx
+│   │   │   ├── order.tsx
+│   │   │   └── payment.tsx
 │   │   ├── index.tsx
-│   │   ├── login.tsx
-│   │   ├── 404.tsx
-│   │   ├── success.tsx
 │   │   └── ...
 │   ├── styles/
-│   │   ├── antd
-│   │   ├── swiper
-│   │   ├── waves
-│   │   └── global.css
-│   └── types/
-│       └── interface.ts
-├── package.json
-├── .eslintrc.json
-├── .prettierrc
-├── README.md
-├── tailwind.confing.js
-└── tsconfig.json
+│   │   ├── antd/
+│   │   │   └── antd.css
+│   │   └── globals.css
+│   ├── types
+│   └── interface.ts
+├── next.config.js
+├── package.js
+├── tailwind.config.js
+└── tsconfig.js
 ```
 
 ---
