@@ -129,7 +129,7 @@ export default function Index({
           placeholder='請輸入諮商師姓名'
         />
       </Tooltip>
-      <h3 className='text-xl font-bold mb-4'>諮商師開通狀態</h3>
+      <h3 className='text-xl font-bold mb-4'>開通狀態</h3>
 
       <div>
         <ul className='flex pb-2 font-bold h-[57px] bg-white border-b border-[#A0AEC0] text-[#A0AEC0] sticky top-[-50px] items-baseline z-50'>

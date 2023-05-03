@@ -62,7 +62,7 @@ export function DashBoardLayout({ children }: { children: React.ReactNode }) {
                 <UserOutlined
                   className={`${isDashBoardButton} sideBarButton text-secondary`}
                 />
-                <p>諮商師開通狀態</p>
+                <p>開通狀態</p>
               </Link>
             </li>
 
