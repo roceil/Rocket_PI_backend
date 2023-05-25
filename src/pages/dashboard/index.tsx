@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import useCloseLoading from '@/common/hooks/useCloseLoading'
@@ -8,8 +8,7 @@ import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 import { loadingStatus } from '@/common/redux/feature/loading'
 import CustomAlert from '@/common/helpers/customAlert'
 import { ILicenseList } from '@/types/interface'
-
-
+import useDebounce from '@/common/hooks/useDebounce'
 
 export const getServerSideProps = async () => {
   try {
@@ -57,22 +56,20 @@ export default function Index({
       console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
     }
   }
-  const handleSearch = (e: { key: string }) => {
-    if (e.key === 'Enter') {
-      keyWordGet()
-    }
-  }
+
+  // ==================== Debounce API ====================
+  const debouncedValue = useDebounce<string>(searchWord, 500)
+  useEffect(() => {
+    keyWordGet()
+  }, [debouncedValue])
 
   // ==================== 開關開通狀態 API ====================
   const handleSwitch = async (CounselorId: number, validation: boolean) => {
     try {
-      await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/udateValidation`,
-        {
-          CounselorId,
-          Validation: !validation
-        }
-      )
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/udateValidation`, {
+        CounselorId,
+        Validation: !validation
+      })
       keyWordGet()
       CustomAlert({
         modal,
@@ -123,19 +120,18 @@ export default function Index({
       dispatch(loadingStatus('none'))
     }
   }
+
   return (
     <DashBoardLayout>
-      <Tooltip title='以 Enter 鍵搜尋'>
-        <input
-          value={searchWord}
-          onChange={e => setSearchWord(e.target.value)}
-          onKeyDown={handleSearch}
-          type='text'
-          className='border border-gray-300 mb-4 rounded-full bg-gray-200 py-1 px-3 placeholder:text-gray-500 outline-none'
-          placeholder='請輸入諮商師姓名'
-        />
-      </Tooltip>
-      <h3 className='text-xl font-bold mb-4'>開通狀態</h3>
+      <input
+        value={searchWord}
+        onChange={e => setSearchWord(e.target.value)}
+        type='text'
+        className='border border-gray-300 mb-4 rounded-full bg-gray-200 py-1 px-3 placeholder:text-gray-500 outline-none'
+        placeholder='請輸入諮商師姓名'
+      />
+
+      <h3 className='text-xl font-bold mb-4'>諮商師開通狀態</h3>
 
       <div>
         <ul className='flex pb-2 font-bold h-[57px] bg-white border-b border-[#A0AEC0] text-[#A0AEC0] sticky top-[-50px] items-baseline z-50'>

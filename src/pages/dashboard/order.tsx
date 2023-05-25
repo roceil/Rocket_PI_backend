@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -7,8 +7,7 @@ import rateStar from 'public/rateStar.svg'
 import useCloseLoading from '@/common/hooks/useCloseLoading'
 import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 import { IOrderRenderData } from '@/types/interface'
-
-
+import useDebounce from '@/common/hooks/useDebounce'
 
 export const getServerSideProps = async () => {
   try {
@@ -59,17 +58,17 @@ export default function Order({
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/getAppTList?UserName=${searchWord}`
       )
-      console.log(res)
       setRenderData(res.data.Data.appointmentsList)
     } catch (error) {
       console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
     }
   }
-  const handleSearch = (e: { key: string }) => {
-    if (e.key === 'Enter') {
-      keyWordGet()
-    }
-  }
+
+  // ==================== Debounce API ====================
+  const debouncedValue = useDebounce<string>(searchWord, 500)
+  useEffect(() => {
+    keyWordGet()
+  }, [debouncedValue])
 
   // ==================== 確認訂單狀態 Switch ====================
   const checkReservationStatus = (status: string) => {
@@ -106,16 +105,13 @@ export default function Order({
 
   return (
     <DashBoardLayout>
-      <Tooltip title='以 Enter 鍵搜尋'>
-        <input
-          value={searchWord}
-          onChange={e => setSearchWord(e.target.value)}
-          onKeyDown={handleSearch}
-          type='text'
-          className='border border-gray-300 mb-4 rounded-full bg-gray-200 py-1 px-3 placeholder:text-gray-500 outline-none'
-          placeholder='請輸入用戶姓名'
-        />
-      </Tooltip>
+      <input
+        value={searchWord}
+        onChange={e => setSearchWord(e.target.value)}
+        type='text'
+        className='border border-gray-300 mb-4 rounded-full bg-gray-200 py-1 px-3 placeholder:text-gray-500 outline-none'
+        placeholder='請輸入用戶姓名'
+      />
       <h3 className='text-xl font-bold mb-4'>訂單記錄</h3>
 
       <div>
