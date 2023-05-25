@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { Statistic, Tooltip } from 'antd'
@@ -6,6 +6,7 @@ import CountUp from 'react-countup'
 import { IOrderRenderData } from '@/types/interface'
 import { DashBoardLayout } from '@/modules/dashboard/DashBoardLayout'
 import useCloseLoading from '@/common/hooks/useCloseLoading'
+import useDebounce from '@/common/hooks/useDebounce'
 
 export const getServerSideProps = async () => {
   try {
@@ -53,24 +54,22 @@ export default function Payment({
       console.log('🚀 ~ file: payment.tsx:46 ~ keyWordGet ~ error:', error)
     }
   }
-  const handleSearch = (e: { key: string }) => {
-    if (e.key === 'Enter') {
-      keyWordGet()
-    }
-  }
+
+  // ==================== Debounce API ====================
+  const debouncedValue = useDebounce<string>(searchWord, 500)
+  useEffect(() => {
+    keyWordGet()
+  }, [debouncedValue])
 
   return (
     <DashBoardLayout>
-      <Tooltip title='以 Enter 鍵搜尋'>
-        <input
-          value={searchWord}
-          onChange={e => setSearchWord(e.target.value)}
-          onKeyDown={handleSearch}
-          type='text'
-          className='border border-gray-300 mb-4 rounded-full bg-gray-200 py-1 px-3 placeholder:text-gray-500 outline-none'
-          placeholder='請輸入用戶姓名'
-        />
-      </Tooltip>
+      <input
+        value={searchWord}
+        onChange={e => setSearchWord(e.target.value)}
+        type='text'
+        className='border border-gray-300 mb-4 rounded-full bg-gray-200 py-1 px-3 placeholder:text-gray-500 outline-none'
+        placeholder='請輸入用戶姓名'
+      />
 
       <div className=' flex justify-between items-center'>
         <h3 className='text-xl font-bold mb-4'>金流記錄</h3>
